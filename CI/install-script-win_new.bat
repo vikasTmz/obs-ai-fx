@@ -27,8 +27,8 @@ cd build_64
 
 cmake.exe ../../ ^
 -DSPEECH_API_GOOGLE_HTTP_OLD=ON ^
--DOBS_SOURCE_DIR='%DepsBaseOBS%\obs_src\' ^
--DOBS_LIB_DIR='%DepsBaseOBS%\obs_src\build_64\' ^
+-DOBS_SOURCE_DIR='C:\Users\vikas\Documents\Brown_MSCS\Spring2021\CS1301\obs-studio-new' ^
+-DOBS_LIB_DIR='C:\Users\vikas\Documents\Brown_MSCS\Spring2021\CS1301\obs-studio-new\build' ^
 -DQT_DIR='C:\Qt\5.15.0\msvc2019_64' ^
  -G "Visual Studio 16 2019" ^
 "%API_OR_UI_KEY_ARG%"

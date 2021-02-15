@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(obs_google_caption_plugin)
+project(obs-ai-fx)
 
 
 #message("prefix: ${CMAKE_FIND_LIBRARY_PREFIXES}")
@@ -56,8 +56,8 @@ if (NOT OBS_LIB_DIR)
     message(FATAL_ERROR "OBS_LIB_DIR not set")
 endif ()
 
-configure_file(CI/post-install-script-win.cmd CI/post-install-script-win.cmd)
 #[[
+configure_file(CI/post-install-script-win.cmd CI/post-install-script-win.cmd)
 configure_file(CI/post-install-script-osx.sh CI/post-install-script-osx.sh)
 configure_file(CI/post-install-script-linux.sh CI/post-install-script-linux.sh)
 ]]
@@ -82,7 +82,7 @@ add_compile_definitions(BUILD_CAPTIONS=1)
 include_directories(${OBS_SOURCE_DIR}/libobs)
 include_directories(${OBS_SOURCE_DIR}/UI/obs-frontend-api/)
 
-set(obs_google_caption_plugin_SOURCES
+set(obs-ai-fx_SOURCES
         src/ui/MainCaptionWidget.cpp
         src/ui/CaptionSettingsWidget.cpp
 
@@ -96,7 +96,7 @@ set(obs_google_caption_plugin_SOURCES
         src/ui/CaptionDock.cpp
         )
 
-set(obs_google_caption_plugin_HEADERS
+set(obs-ai-fx_HEADERS
         src/SourceAudioCaptureSession.h
         src/OutputAudioCaptureSession.h
         src/SourceCaptioner.h
@@ -123,16 +123,16 @@ find_package(Qt5 REQUIRED COMPONENTS Widgets Core)
 set(obs_QRC src/resources/obs.qrc)
 qt5_add_resources(obs_QRC_SOURCES ${obs_QRC})
 
-add_library(obs_google_caption_plugin MODULE
-        ${obs_google_caption_plugin_HEADERS}
-        ${obs_google_caption_plugin_SOURCES}
+add_library(obs-ai-fx MODULE
+        ${obs-ai-fx_HEADERS}
+        ${obs-ai-fx_SOURCES}
         ${obs_QRC_SOURCES}
         )
 
 
 if (CAPTION_STREAM_WINDOWS_STATIC_RUNTIME)
     message(CAPTION_STREAM_WINDOWS_STATIC_RUNTIME ENABLED)
-    #        set_property(TARGET obs_google_caption_plugin PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
+    #        set_property(TARGET obs-ai-fx PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
     foreach (flag_var
             CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
             CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO)
@@ -147,18 +147,22 @@ endif ()
 
 if (PLUGIN_COMPILE_DEFINITIONS)
     #    message("PLUGIN_COMPILE_DEFINITIONS ${PLUGIN_COMPILE_DEFINITIONS}")
-    target_compile_definitions(obs_google_caption_plugin PRIVATE ${PLUGIN_COMPILE_DEFINITIONS})
+    target_compile_definitions(obs-ai-fx PRIVATE ${PLUGIN_COMPILE_DEFINITIONS})
 endif ()
 
 #message("suffix: ${CMAKE_FIND_LIBRARY_SUFFIXES}")
 
+message("setting LIBOBS_LIBRARY: ${OBS_LIB_DIR}/libobs/")
+
 find_library(LIBOBS_LIBRARY obs
         ${OBS_LIB_DIR}
         ${OBS_LIB_DIR}/libobs/
-        ${OBS_LIB_DIR}/libobs/RelWithDebInfo/
+        ${OBS_LIB_DIR}/libobs/Debug/
         ${OBS_LIB_DIR}/libobs/Relase/
         ${OBS_LIB_DIR}/libobs/*/
         )
+
+message("value of libOBS: ${LIBOBS_LIBRARY}")
 
 if (NOT LIBOBS_LIBRARY)
     message(FATAL_ERROR "libOBS not found: ${OBS_LIB_DIR}")
@@ -168,7 +172,7 @@ message("using libOBS: ${LIBOBS_LIBRARY}")
 find_library(OBS_FRONTEND_LIBRARY obs-frontend-api
         ${OBS_LIB_DIR}
         ${OBS_LIB_DIR}/UI/obs-frontend-api/
-        ${OBS_LIB_DIR}/UI/obs-frontend-api/RelWithDebInfo/
+        ${OBS_LIB_DIR}/UI/obs-frontend-api/Debug/
         ${OBS_LIB_DIR}/UI/obs-frontend-api/Release/
         ${OBS_LIB_DIR}/UI/obs-frontend-api/*/
         )
@@ -182,7 +186,7 @@ if (NOT OBS_FRONTEND_LIBRARY)
     message(FATAL_ERROR "obs_frontend_library not found")
 endif ()
 
-target_link_libraries(obs_google_caption_plugin
+target_link_libraries(obs-ai-fx
         caption_stream
         ${OBS_FRONTEND_LIBRARY}
         ${LIBOBS_LIBRARY}
