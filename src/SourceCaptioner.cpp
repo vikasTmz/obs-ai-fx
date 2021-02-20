@@ -198,7 +198,7 @@ bool SourceCaptioner::start_caption_stream(const SourceCaptionerSettings &new_se
 bool SourceCaptioner::_start_caption_stream(bool restart_stream) {
 //    debug_log("start_caption_stream");
 
-    bool caption_settings_equal;
+    bool caption_settings_equal = false;
     {
         const SceneCollectionSettings &scene_col_settings = this->settings.get_scene_collection_settings(selected_scene_collection_name);
         const CaptionSourceSettings &selected_caption_source_settings = scene_col_settings.caption_source_settings;
