@@ -32,3 +32,16 @@ cmake.exe ../../ ^
 -DQT_DIR='C:\Qt\5.15.0\msvc2019_64' ^
  -G "Visual Studio 16 2019" ^
 "%API_OR_UI_KEY_ARG%"
+REM -DCMAKE_BUILD_TYPE=Release ^
+REM -DBUILD_64=ON
+
+if %errorlevel% neq 0 (
+    echo cmake 64 failed
+    cd ..
+    exit /b %errorlevel%
+)
+
+cd ..
+cd
+REM dir build_64
+REM cd
